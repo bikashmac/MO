@@ -3,7 +3,7 @@ libs <- c("GA", "dplyr", "ggplot2")
 invisible(lapply(libs, function(pkg) if (!require(pkg, character.only = TRUE)) install.packages(pkg)))
 lapply(libs, library, character.only = TRUE)
 
-# Load dataset
+# Loading dataset
 df <- read.csv("smart_grid_energy_dataset.csv", row.names = 1)
 df <- na.omit(df)
 
@@ -11,7 +11,7 @@ df <- na.omit(df)
 df$energy_cost <- df$voltage * df$current * 0.01  # Approximate cost factor
 df$demand_deviation <- abs(df$demand - mean(df$demand))  # Demand deviation
 
-# Objective function based on the given equation
+
 objective_function <- function(index) {
   index <- round(index)  # Ensure it's an integer
   
@@ -23,7 +23,7 @@ objective_function <- function(index) {
   
   C <- df$energy_cost[index]
   E <- df$power_co[index]
-  P <- 0.05  # Example penalty coefficient
+  P <- 0.05  
   D <- df$demand_deviation[index]
   
   return(-(C * E + P * D))  # Minimize total cost function
@@ -41,7 +41,7 @@ result <- ga(
   run = 50
 )
 
-# Extract best solution safely
+
 best_index <- round(result@solution)[1]  # Select the first value if multiple exist
 best_value <- objective_function(best_index)
 
