@@ -3,15 +3,14 @@ libs <- c("pso", "dplyr", "ggplot2")
 invisible(lapply(libs, function(pkg) if (!require(pkg, character.only = TRUE)) install.packages(pkg)))
 lapply(libs, library, character.only = TRUE)
 
-# Load dataset
+
 df <- read.csv("smart_grid_energy_dataset.csv", row.names = 1)
 df <- na.omit(df)
 
-# Compute energy cost and demand deviation
+
 df$energy_cost <- df$voltage * df$current * 0.01  # Approximate cost factor
 df$demand_deviation <- abs(df$demand - mean(df$demand))  # Demand deviation
 
-# Objective function based on f(x) = Σ (CiEi + PiDi)
 objective_function <- function(x) {
   index <- round(x)  # Ensure it's an integer
   
@@ -19,7 +18,7 @@ objective_function <- function(x) {
   
   C <- df$energy_cost[index]
   E <- df$power_co[index]
-  P <- 0.05  # Example penalty coefficient
+  P <- 0.05  
   D <- df$demand_deviation[index]
   
   return(-(C * E + P * D))  # Minimize total cost function
