@@ -2,13 +2,13 @@
 library(dplyr)
 library(ggplot2)
 
-# Load dataset with error handling
+
 df <- tryCatch(
   read.csv("smart_grid_energy_dataset.csv"),
   error = function(e) stop("Error loading dataset: Ensure 'smart_grid_energy_dataset.csv' exists and has correct column names.")
 )
 
-# Verify required columns
+
 required_cols <- c("time", "voltage", "current", "demand")
 missing_cols <- setdiff(required_cols, colnames(df))
 if (length(missing_cols) > 0) {
@@ -30,7 +30,7 @@ evaluate_fitness <- function(chromosome) {
   return(sum(chromosome$congestion_score))
 }
 
-# Simulated Annealing Optimization (Single Run)
+# Simulated Annealing Optimization 
 run_sa <- function(data, max_iter = 50) {
   fitness_history <- numeric()
   
@@ -67,6 +67,6 @@ run_sa <- function(data, max_iter = 50) {
 set.seed(123)
 sa_result <- run_sa(df, max_iter = 50)
 
-# Display optimized solution
+
 print(sa_result$solution)
 
